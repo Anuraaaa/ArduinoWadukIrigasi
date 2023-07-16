@@ -112,7 +112,7 @@ void sendtoDatabase(long distance) {
     Serial.print("httpCode: ");
     Serial.println(httpCode);
     Serial.print("payload: ");
-    Serial.println("payload");
+    Serial.println(payload);
 
     http.end();
   }
@@ -213,6 +213,7 @@ void pintuHandlerServo1(long ditance0, long distance1)
   if (distance0 >= 8) {
     if (distance1 >= 3 && distance1 <= 5)
     {
+      sendtoDatabase(distance1);
       for (valueServo1 = 0; valueServo1 <= 180; valueServo1++)
       {
         servo1.write(valueServo1);
@@ -229,6 +230,7 @@ void pintuHandlerServo2(long distance0, long distance2)
   if (distance0 >= 8) {
     if (distance2 >= 3 && distance2 <= 5)
     {
+      sendtoDatabase(distance2);
       for (valueServo2 = 0; valueServo2 <= 180; valueServo2++)
       {
         servo2.write(valueServo2);
@@ -244,6 +246,7 @@ void pintuHandlerServo3(long distance0, long distance3)
   if (distance0 >= 8) {
     if (distance3 >= 3 && distance3 <= 5)
     {
+      sendtoDatabase(distance3);
       for (valueServo3 = 0; valueServo3 <= 180; valueServo3++)
       {
         servo3.write(valueServo1);
