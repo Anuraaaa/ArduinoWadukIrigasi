@@ -27,19 +27,19 @@ const int trigPin0 = 22;
 const int echoPin0 = 23;
 
 //Ultrasonic 1 Respon To Servo 1
-const int pinServo1 = 33;
-const int trigPin1 = 22;
-const int echoPin1 = 23;
+const int pinServo1 = 5;
+const int trigPin1 = 19;
+const int echoPin1 = 18;
 
 //Ultrasonic 2 Respon To Servo 2
-const int pinServo2 = 33;
-const int trigPin2 = 22;
-const int echoPin2 = 23;
+const int pinServo2 = 32;
+const int trigPin2 = 33;
+const int echoPin2 = 25;
 
 //Ultrasonic 3 Respon To Servo 3
-const int pinServo3 = 33;
-const int trigPin3 = 22;
-const int echoPin3 = 23;
+const int pinServo3 = 25;
+const int trigPin3 = 26;
+const int echoPin3 = 27;
 
 //Long Distance From Waduk
 long duration0;
