@@ -1,7 +1,7 @@
-#IOT Waduk Arduino
+# IOT Waduk Arduino
 
 
-##Komponen:
+## Komponen:
 
 - Arduino ESP32
 - BreadBoard
@@ -11,7 +11,8 @@
 - Kabel Jumper
 
 
-##Algoritma:
+## Algoritma:
+
 	Arduino:
 	- Terdapat 1 waduk yang ada 3 pintu
 	- Terdapat 3 pintu untuk mengalirkan air dari waduk
@@ -28,3 +29,23 @@
 	- Terdapat login admin only 
 	- Terdapat CRUD user admin 
 
+
+## Usable Pin:
+- Ultrasonic Respon To LCD
+const int trigPin0 = 22;
+const int echoPin0 = 23;
+
+- Ultrasonic 1 Respon To Servo 1
+const int pinServo1 = 5;
+const int trigPin1 = 19;
+const int echoPin1 = 18;
+
+- Ultrasonic 2 Respon To Servo 2
+const int pinServo2 = 32;
+const int trigPin2 = 33;
+const int echoPin2 = 25;
+
+- Ultrasonic 3 Respon To Servo 3
+const int pinServo3 = 25;
+const int trigPin3 = 26;
+const int echoPin3 = 27;
