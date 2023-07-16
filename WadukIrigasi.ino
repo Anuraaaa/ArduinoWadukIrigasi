@@ -92,9 +92,6 @@ void setup() {
 
 void loop() {
   wadukMainHandler();
-  pintuHandlerUltrasonic1();
-  pintuHandlerUltrasonic2();
-  pintuHandlerUltrasonic3();
 }
 
 void sendtoDatabase(long distance) {
@@ -149,9 +146,12 @@ void wadukMainHandler()
   // Calculating the distance
   distance0 = duration0 * 0.034 / 2;
   displaytoLCD(distance0);
+  pintuHandlerUltrasonic1(distance0);
+  pintuHandlerUltrasonic2(distance0);
+  pintuHandlerUltrasonic3(distance0);
 }
 
-void pintuHandlerUltrasonic1()
+void pintuHandlerUltrasonic1(long distance0)
 {
   digitalWrite(trigPin1, LOW);
   delayMicroseconds(2);
@@ -167,10 +167,10 @@ void pintuHandlerUltrasonic1()
   Serial.print("Kedalaman Air di Pintu 1: ");
   Serial.print(distance1);
   Serial.println("cm");
-  pintuHandlerServo1();
+  pintuHandlerServo1(distance0, distance1);
 }
 
-void pintuHandlerUltrasonic2()
+void pintuHandlerUltrasonic2(long distance0)
 {
   digitalWrite(trigPin2, LOW);
   delayMicroseconds(2);
@@ -186,10 +186,10 @@ void pintuHandlerUltrasonic2()
   Serial.print("Kedalaman Air di Pintu 2: ");
   Serial.print(distance2);
   Serial.println("cm");
-  pintuHandlerServo2();
+  pintuHandlerServo2(distance0, distance2);
 }
 
-void pintuHandlerUltrasonic3()
+void pintuHandlerUltrasonic3(long distance0)
 {
   digitalWrite(trigPin3, LOW);
   delayMicroseconds(2);
@@ -205,42 +205,51 @@ void pintuHandlerUltrasonic3()
   Serial.print("Kedalaman Air di Pintu 3: ");
   Serial.print(distance3);
   Serial.println("cm");
-  pintuHandlerServo3();
+  pintuHandlerServo3(distance0, distance3);
 }
 
-void pintuHandlerServo1()
+void pintuHandlerServo1(long ditance0, long distance1)
 {
-  if (distance1 >= 8 && distance1 <= 10)
-  {
-    for (valueServo1 = 0; valueServo1 <= 180; valueServo1++)
+  if (distance0 >= 8) {
+    if (distance1 >= 3 && distance1 <= 5)
     {
-      servo1.write(valueServo1);
-      delay(5);
-    }    
-  }    
+      for (valueServo1 = 0; valueServo1 <= 180; valueServo1++)
+      {
+        servo1.write(valueServo1);
+        delay(5);
+      }    
+    }        
+  }
+  delay(2000);
 }
 
 
-void pintuHandlerServo2()
+void pintuHandlerServo2(long distance0, long distance2)
 {
-  if (distance2 >= 8 && distance2 <= 10)
-  {
-    for (valueServo2 = 0; valueServo2 <= 180; valueServo2++)
+  if (distance0 >= 8) {
+    if (distance2 >= 3 && distance2 <= 5)
     {
-      servo2.write(valueServo2);
-      delay(5);
-    }    
-  }    
+      for (valueServo2 = 0; valueServo2 <= 180; valueServo2++)
+      {
+        servo2.write(valueServo2);
+        delay(5);
+      }    
+    }        
+  }
+  delay(2000);
 }
 
-void pintuHandlerServo3()
+void pintuHandlerServo3(long distance0, long distance3)
 {
-  if (distance3 >= 8 && distance3 <= 10)
-  {
-    for (valueServo3 = 0; valueServo3 <= 180; valueServo3++)
+  if (distance0 >= 8) {
+    if (distance3 >= 3 && distance3 <= 5)
     {
-      servo3.write(valueServo1);
-      delay(5);
-    }    
-  }    
+      for (valueServo3 = 0; valueServo3 <= 180; valueServo3++)
+      {
+        servo3.write(valueServo1);
+        delay(5);
+      }    
+    }        
+  }
+  delay(2000);
 }
