@@ -2,16 +2,15 @@
 #include <Servo.h>
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <Arduino_JSON.h>
 
 Servo servo1;
 Servo servo2;
 Servo servo3;
 
-const char* ssid = "";
-const char* password = "";
-
-String postData = "";
-String payload = "";
+const char* ssid = "Random";
+const char* password = "abcd12345";
+const char* serverName = "http://192.168.43.204/projectarduino/api.php";
 
 const int lcdColumn = 16;
 const int lcdRows = 2;
@@ -94,28 +93,35 @@ void loop() {
   wadukMainHandler();
 }
 
+
+
 void sendtoDatabase(long distance) {
   if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    int httpCode;
-
-    Serial.println("Sending Data...");
-    postData = "ketinggianair="+distance;
-    payload = "";
+      WiFiClient client;
+      HTTPClient http;
     
-    http.begin("http://localhost/projectarduino/api.php");
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    httpCode = http.POST(postData);
-    payload = http.getString();
-
-    Serial.print("httpCode: ");
-    Serial.println(httpCode);
-    Serial.print("payload: ");
-    Serial.println(payload);
-
-    http.end();
-  }
+      // Your Domain name with URL path or IP address with path
+      http.begin(client, serverName);
+            
+      http.addHeader("Content-Type", "application/x-www-form-urlencoded");      
+      String postData = "api_key=tPmAT5Ab3j7F9&ketinggianair=";
+      String totalPostData = postData+distance;
+      int httpResponseCode = http.POST(totalPostData);
+      String payload = http.getString();
+     
+      if (httpResponseCode>0) {
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
+        Serial.println(payload);
+      }
+      else {
+        Serial.print("HTTP Error code: ");
+        Serial.println(httpResponseCode);
+        Serial.println(payload);
+      }        
+      // Free resources
+      http.end();
+    }
 }
 
 void displaytoLCD(long distance)
@@ -211,7 +217,7 @@ void pintuHandlerUltrasonic3(long distance0)
 void pintuHandlerServo1(long ditance0, long distance1)
 {
   if (distance0 >= 8) {
-    if (distance1 >= 3 && distance1 <= 5)
+    if (distance1 >= 3 && distance1 <= 10)
     {
       sendtoDatabase(distance1);
       for (valueServo1 = 0; valueServo1 <= 180; valueServo1++)
@@ -228,7 +234,7 @@ void pintuHandlerServo1(long ditance0, long distance1)
 void pintuHandlerServo2(long distance0, long distance2)
 {
   if (distance0 >= 8) {
-    if (distance2 >= 3 && distance2 <= 5)
+    if (distance2 >= 3 && distance2 <= 10)
     {
       sendtoDatabase(distance2);
       for (valueServo2 = 0; valueServo2 <= 180; valueServo2++)
@@ -244,7 +250,7 @@ void pintuHandlerServo2(long distance0, long distance2)
 void pintuHandlerServo3(long distance0, long distance3)
 {
   if (distance0 >= 8) {
-    if (distance3 >= 3 && distance3 <= 5)
+    if (distance3 >= 3 && distance3 <= 10)
     {
       sendtoDatabase(distance3);
       for (valueServo3 = 0; valueServo3 <= 180; valueServo3++)
