@@ -8,6 +8,7 @@ Servo servo1;
 Servo servo2;
 Servo servo3;
 
+const char* blynkauth = "";
 const char* ssid = "vinz";
 const char* password = "Alvin406";
 const char* serverName = "http://192.168.1.4/projectarduino/api.php";
@@ -99,10 +100,12 @@ void setup() {
 
   Serial.println("STATUS: WIFI CONNECTED");
   Serial.print("IP ADDRESS: ");
+  Blynk.begin(blynkauth, ssid, password);
   Serial.println(WiFi.localIP());
 }
 
 void loop() {
+  Blynk.run();
   wadukMainHandler();
 }
 
