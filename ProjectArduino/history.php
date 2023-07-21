@@ -61,6 +61,7 @@
         </header>
         <section>
             <div class="md-distance-top">
+                <h1 class="border-bottom mb-5">Catatan</h1>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
