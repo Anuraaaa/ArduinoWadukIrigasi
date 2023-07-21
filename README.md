@@ -31,21 +31,26 @@
 
 
 ## Usable Pin:
+- LCD
+	- SDA LCD to G21;
+	- SCL LCD to G22;
+
+
 - Ultrasonic Respon To LCD
-const int trigPin0 = 22;
-const int echoPin0 = 23;
+	- const int trigPin0 = 16;
+	- const int echoPin0 = 17;
 
 - Ultrasonic 1 Respon To Servo 1
-const int pinServo1 = 5;
-const int trigPin1 = 19;
-const int echoPin1 = 18;
+	- const int pinServo1 = 5;
+	- const int trigPin1 = 19;
+	- const int echoPin1 = 18;
 
 - Ultrasonic 2 Respon To Servo 2
-const int pinServo2 = 32;
-const int trigPin2 = 33;
-const int echoPin2 = 25;
+	- const int pinServo2 = 32;
+	- const int trigPin2 = 33;
+	- const int echoPin2 = 25;
 
 - Ultrasonic 3 Respon To Servo 3
-const int pinServo3 = 25;
-const int trigPin3 = 26;
-const int echoPin3 = 27;
+	- const int pinServo3 = 4;
+	- const int trigPin3 = 26;
+	- const int echoPin3 = 27;
