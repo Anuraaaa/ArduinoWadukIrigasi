@@ -8,9 +8,9 @@ Servo servo1;
 Servo servo2;
 Servo servo3;
 
-const char* ssid = "Random";
-const char* password = "abcd12345";
-const char* serverName = "http://192.168.43.204/projectarduino/api.php";
+const char* ssid = "vinz";
+const char* password = "Alvin406";
+const char* serverName = "http://192.168.1.4/projectarduino/api.php";
 
 const int lcdColumn = 16;
 const int lcdRows = 2;
@@ -21,9 +21,15 @@ int valueServo1 = 0;
 int valueServo2 = 0;
 int valueServo3 = 0;
 
+/*
+ * LCD Pin
+ * SDA = 21;
+ * scl = 22;
+ */
+
 //Ultrasonic Respon To LCD
-const int trigPin0 = 22;
-const int echoPin0 = 23;
+const int trigPin0 = 16;
+const int echoPin0 = 17;
 
 //Ultrasonic 1 Respon To Servo 1
 const int pinServo1 = 5;
@@ -36,7 +42,7 @@ const int trigPin2 = 33;
 const int echoPin2 = 25;
 
 //Ultrasonic 3 Respon To Servo 3
-const int pinServo3 = 25;
+const int pinServo3 = 4;
 const int trigPin3 = 26;
 const int echoPin3 = 27;
 
@@ -55,6 +61,12 @@ int distance2;
 //Long Distance from Pintu 3
 long duration3;
 int distance3;
+
+//IPAddress local_IP(192, 168, 1, 4);
+//IPAddress gateway(192, 168, 1, 1);
+//IPAddress subnet(255, 255, 255, 0);
+//IPAddress primaryDNS(8, 8, 8, 8);
+//IPAddress secondaryDNS(8, 8, 4, 4);
 
 void setup() {
   Serial.begin(9600); // Starts the serial communication
@@ -83,6 +95,7 @@ void setup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
+//  WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS);
 
   Serial.println("STATUS: WIFI CONNECTED");
   Serial.print("IP ADDRESS: ");
@@ -127,13 +140,13 @@ void sendtoDatabase(long distance) {
 void displaytoLCD(long distance)
 {
   // Prints the distance on the Serial Monitor
-  Serial.print("Kedalaman Air: ");
+  Serial.print("Ketinggian Air: ");
   Serial.print(distance);
   Serial.println("cm");  
 
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Kedalaman Air ");
+  lcd.print("Ketinggian Air ");
   lcd.setCursor(0, 1);
   lcd.print(distance);
   lcd.print("cm");  
@@ -170,7 +183,7 @@ void pintuHandlerUltrasonic1(long distance0)
   // Calculating the distance
   distance1 = duration1 * 0.034 / 2;
   // Prints the distance on the Serial Monitor
-  Serial.print("Kedalaman Air di Pintu 1: ");
+  Serial.print("Ketinggian Air di Pintu 1: ");
   Serial.print(distance1);
   Serial.println("cm");
   pintuHandlerServo1(distance0, distance1);
@@ -189,7 +202,7 @@ void pintuHandlerUltrasonic2(long distance0)
   // Calculating the distance
   distance2 = duration2 * 0.034 / 2;
   // Prints the distance on the Serial Monitor
-  Serial.print("Kedalaman Air di Pintu 2: ");
+  Serial.print("Ketinggian Air di Pintu 2: ");
   Serial.print(distance2);
   Serial.println("cm");
   pintuHandlerServo2(distance0, distance2);
@@ -208,7 +221,7 @@ void pintuHandlerUltrasonic3(long distance0)
   // Calculating the distance
   distance3 = duration3 * 0.034 / 2;
   // Prints the distance on the Serial Monitor
-  Serial.print("Kedalaman Air di Pintu 3: ");
+  Serial.print("Ketinggian Air di Pintu 3: ");
   Serial.print(distance3);
   Serial.println("cm");
   pintuHandlerServo3(distance0, distance3);
@@ -220,10 +233,10 @@ void pintuHandlerServo1(long ditance0, long distance1)
     if (distance1 >= 3 && distance1 <= 10)
     {
       sendtoDatabase(distance1);
-      for (valueServo1 = 0; valueServo1 <= 180; valueServo1++)
+      for (valueServo1 = 0; valueServo1 <= 90; valueServo1++)
       {
         servo1.write(valueServo1);
-        delay(5);
+        delay(15);
       }    
     }        
   }
@@ -237,10 +250,10 @@ void pintuHandlerServo2(long distance0, long distance2)
     if (distance2 >= 3 && distance2 <= 10)
     {
       sendtoDatabase(distance2);
-      for (valueServo2 = 0; valueServo2 <= 180; valueServo2++)
+      for (valueServo2 = 0; valueServo2 <= 90; valueServo2++)
       {
         servo2.write(valueServo2);
-        delay(5);
+        delay(15);
       }    
     }        
   }
@@ -253,10 +266,10 @@ void pintuHandlerServo3(long distance0, long distance3)
     if (distance3 >= 3 && distance3 <= 10)
     {
       sendtoDatabase(distance3);
-      for (valueServo3 = 0; valueServo3 <= 180; valueServo3++)
+      for (valueServo3 = 0; valueServo3 <= 90; valueServo3++)
       {
-        servo3.write(valueServo1);
-        delay(5);
+        servo3.write(valueServo3);
+        delay(15);
       }    
     }        
   }
