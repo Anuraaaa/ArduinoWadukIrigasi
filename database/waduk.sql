@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2023 at 07:30 AM
+-- Generation Time: Jul 23, 2023 at 01:47 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -30,16 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `history` (
   `ID` int(11) NOT NULL,
   `Waktu` varchar(24) NOT NULL,
-  `KetinggianAir` float(11) NOT NULL
+  `KetinggianAir` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `history`
---
-
-INSERT INTO `history` (`ID`, `Waktu`, `KetinggianAir`) VALUES
-(1, '08/08/1999', 28.0),
-(2, '08/09/2772', 99.0);
 
 -- --------------------------------------------------------
 
@@ -86,7 +78,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `users`
