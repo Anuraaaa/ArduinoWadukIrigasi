@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `history` (
   `ID` int(11) NOT NULL,
   `Waktu` varchar(24) NOT NULL,
-  `KetinggianAir` int(11) NOT NULL
+  `KetinggianAir` float(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -38,8 +38,8 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`ID`, `Waktu`, `KetinggianAir`) VALUES
-(1, '08/08/1999', 28),
-(2, '08/09/2772', 99);
+(1, '08/08/1999', 28.0),
+(2, '08/09/2772', 99.0);
 
 -- --------------------------------------------------------
 

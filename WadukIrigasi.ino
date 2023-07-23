@@ -8,10 +8,13 @@ Servo servo1;
 Servo servo2;
 Servo servo3;
 
-const char* blynkauth = "";
-const char* ssid = "vinz";
-const char* password = "Alvin406";
-const char* serverName = "http://192.168.1.4/projectarduino/api.php";
+#define BLYNK_TEMPLATE_ID "TMPL6i43gn9Q0"
+#define BLYNK_TEMPLATE_NAME "baru"
+#define BLYNK_AUTH_TOKEN "mUOKGfGRJ8gt9Xu3nxDQ3fDCD-s7wT7b"
+
+const char* ssid = "Random";
+const char* password = "abcd12345";
+const char* serverName = "http://192.168.43.204/projectarduino/api.php";
 
 const int lcdColumn = 16;
 const int lcdRows = 2;
@@ -49,21 +52,29 @@ const int echoPin3 = 27;
 
 //Long Distance From Waduk
 long duration0;
-int distance0;
+float distance0;
+float ketinggianAir0;
+float kedalamanWadah0 = 18.9;
 
 //Long Distance from Pintu 1
 long duration1;
-int distance1;
+float distance1;
+float ketinggianAir1;
+float kedalamanWadah1 = 9.4; //9.5
 
 //Long Distance from Pintu 2
 long duration2;
-int distance2;
+float distance2;
+float ketinggianAir2;
+float kedalamanWadah2 = 9.4; //9.4
 
 //Long Distance from Pintu 3
 long duration3;
-int distance3;
+float distance3;
+float ketinggianAir3;
+float kedalamanWadah3 = 9.5; //9.5
 
-//IPAddress local_IP(192, 168, 1, 4);
+//IPAddress local_IP(192, 168, 1, 12);
 //IPAddress gateway(192, 168, 1, 1);
 //IPAddress subnet(255, 255, 255, 0);
 //IPAddress primaryDNS(8, 8, 8, 8);
@@ -100,7 +111,7 @@ void setup() {
 
   Serial.println("STATUS: WIFI CONNECTED");
   Serial.print("IP ADDRESS: ");
-  Blynk.begin(blynkauth, ssid, password);
+  Blynk.begin(BLYNK_AUTH_TOKEN, ssid, password);
   Serial.println(WiFi.localIP());
 }
 
@@ -111,7 +122,7 @@ void loop() {
 
 
 
-void sendtoDatabase(long distance) {
+void sendtoDatabase(float distance) {
   if (WiFi.status() == WL_CONNECTED) {
       WiFiClient client;
       HTTPClient http;
@@ -140,7 +151,7 @@ void sendtoDatabase(long distance) {
     }
 }
 
-void displaytoLCD(long distance)
+void displaytoLCD(float distance)
 {
   // Prints the distance on the Serial Monitor
   Serial.print("Ketinggian Air: ");
@@ -167,14 +178,10 @@ void wadukMainHandler()
   duration0 = pulseIn(echoPin0, HIGH);
   // Calculating the distance
   distance0 = duration0 * 0.034 / 2;
-  displaytoLCD(distance0);
-  pintuHandlerUltrasonic1(distance0);
-  pintuHandlerUltrasonic2(distance0);
-  pintuHandlerUltrasonic3(distance0);
-}
+  ketinggianAir0 = kedalamanWadah0- distance0;
+  displaytoLCD(ketinggianAir0);
+  Blynk.virtualWrite(V6,ketinggianAir0);
 
-void pintuHandlerUltrasonic1(long distance0)
-{
   digitalWrite(trigPin1, LOW);
   delayMicroseconds(2);
   // Sets the trigPin on HIGH state for 10 micro seconds
@@ -185,15 +192,13 @@ void pintuHandlerUltrasonic1(long distance0)
   duration1 = pulseIn(echoPin1, HIGH);
   // Calculating the distance
   distance1 = duration1 * 0.034 / 2;
+  ketinggianAir1 = kedalamanWadah1 - distance1;
   // Prints the distance on the Serial Monitor
   Serial.print("Ketinggian Air di Pintu 1: ");
-  Serial.print(distance1);
+  Serial.print(ketinggianAir1);
   Serial.println("cm");
-  pintuHandlerServo1(distance0, distance1);
-}
-
-void pintuHandlerUltrasonic2(long distance0)
-{
+  Blynk.virtualWrite(V3,ketinggianAir1);
+  
   digitalWrite(trigPin2, LOW);
   delayMicroseconds(2);
   // Sets the trigPin on HIGH state for 10 micro seconds
@@ -204,15 +209,13 @@ void pintuHandlerUltrasonic2(long distance0)
   duration2 = pulseIn(echoPin2, HIGH);
   // Calculating the distance
   distance2 = duration2 * 0.034 / 2;
+  ketinggianAir2 = kedalamanWadah2 - distance2;
   // Prints the distance on the Serial Monitor
   Serial.print("Ketinggian Air di Pintu 2: ");
-  Serial.print(distance2);
+  Serial.print(ketinggianAir2);
   Serial.println("cm");
-  pintuHandlerServo2(distance0, distance2);
-}
-
-void pintuHandlerUltrasonic3(long distance0)
-{
+  Blynk.virtualWrite(V4,ketinggianAir2);
+  
   digitalWrite(trigPin3, LOW);
   delayMicroseconds(2);
   // Sets the trigPin on HIGH state for 10 micro seconds
@@ -223,58 +226,106 @@ void pintuHandlerUltrasonic3(long distance0)
   duration3 = pulseIn(echoPin3, HIGH);
   // Calculating the distance
   distance3 = duration3 * 0.034 / 2;
+  ketinggianAir3 = kedalamanWadah3 - distance3;
   // Prints the distance on the Serial Monitor
   Serial.print("Ketinggian Air di Pintu 3: ");
-  Serial.print(distance3);
+  Serial.print(ketinggianAir3);
   Serial.println("cm");
-  pintuHandlerServo3(distance0, distance3);
+  Blynk.virtualWrite(V5,ketinggianAir3);
+
+  pintuMainHandler(ketinggianAir0, ketinggianAir1, ketinggianAir2, ketinggianAir3);
+  delay(1000);
 }
 
-void pintuHandlerServo1(long ditance0, long distance1)
+void pintuHandlerServo1(float ketinggianAir0, float ketinggianAir1)
 {
-  if (distance0 >= 8) {
-    if (distance1 >= 3 && distance1 <= 10)
-    {
-      sendtoDatabase(distance1);
-      for (valueServo1 = 0; valueServo1 <= 90; valueServo1++)
-      {
-        servo1.write(valueServo1);
-        delay(15);
-      }    
-    }        
+  sendtoDatabase(ketinggianAir0);
+  for (valueServo1 = 0; valueServo1 <= 90; valueServo1++)
+  {
+    servo1.write(valueServo1);
+    delay(15);
   }
-  delay(2000);
 }
 
 
-void pintuHandlerServo2(long distance0, long distance2)
+void pintuHandlerServo2(float ketinggianAir0, float ketinggianAir2)
 {
-  if (distance0 >= 8) {
-    if (distance2 >= 3 && distance2 <= 10)
-    {
-      sendtoDatabase(distance2);
-      for (valueServo2 = 0; valueServo2 <= 90; valueServo2++)
-      {
-        servo2.write(valueServo2);
-        delay(15);
-      }    
-    }        
-  }
-  delay(2000);
+  sendtoDatabase(ketinggianAir0);
+  for (valueServo2 = 0; valueServo2 <= 90; valueServo2++)
+  {
+    servo2.write(valueServo2);
+    delay(15);
+  }    
 }
 
-void pintuHandlerServo3(long distance0, long distance3)
+void pintuHandlerServo3(float ketinggianAir0, float ketinggianAir3)
 {
-  if (distance0 >= 8) {
-    if (distance3 >= 3 && distance3 <= 10)
+  sendtoDatabase(ketinggianAir0);
+  for (valueServo3 = 0; valueServo3 <= 90; valueServo3++)
+  {
+    servo3.write(valueServo3);
+    delay(15);
+  }    
+}
+
+void pintuMainHandler(float ketinggianAir0, float ketinggianAir1, float ketinggianAir2, float ketinggianAir3)
+{
+  if (ketinggianAir0 >= 8.0)
+  {
+    if (ketinggianAir1 <= 1.0 && ketinggianAir2 <= 1.0 && ketinggianAir3 <= 1.0)
     {
-      sendtoDatabase(distance3);
-      for (valueServo3 = 0; valueServo3 <= 90; valueServo3++)
+        pintuHandlerServo1(ketinggianAir0, ketinggianAir1);               
+        pintuHandlerServo2(ketinggianAir0, ketinggianAir2);               
+        pintuHandlerServo3(ketinggianAir0, ketinggianAir3);               
+    }
+    else
+    {
+      if (ketinggianAir1 < ketinggianAir2)
       {
-        servo3.write(valueServo3);
-        delay(15);
-      }    
-    }        
+        if (ketinggianAir1 < ketinggianAir3)
+        {
+            if (ketinggianAir0 >= 8.0) 
+            {
+              if (ketinggianAir1 <= 10.0)
+              {
+                    pintuHandlerServo1(ketinggianAir0, ketinggianAir1);        
+              }        
+            }
+        }
+        else
+        {
+            if (ketinggianAir0 >= 8.0) 
+            {
+              if (ketinggianAir3 <= 10.0)
+              {
+                   pintuHandlerServo3(ketinggianAir0, ketinggianAir3);        
+              }        
+            }
+        }
+      }
+      else
+      {
+        if (ketinggianAir2 < ketinggianAir3)
+        {
+            if (ketinggianAir0 >= 8.0) 
+            {
+              if (ketinggianAir1 <= 10.0)
+              {
+                    pintuHandlerServo2(ketinggianAir0, ketinggianAir2);        
+              }        
+            }
+        }
+        else
+        {
+            if (ketinggianAir0 >= 8.0) 
+            {
+              if (ketinggianAir3 <= 10.0)
+              {
+                    pintuHandlerServo3(ketinggianAir0, ketinggianAir3);        
+              }        
+            }
+        }      
+      }
+    }      
   }
-  delay(2000);
 }
