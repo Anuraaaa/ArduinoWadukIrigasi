@@ -2,6 +2,7 @@
     include "config.php";
 
     if (!empty($_POST)) {
+        date_default_timezone_set('Asia/Jakarta');
         $waktu = date("d/m/y h:m:s");
         $ketinggianair = $_POST['ketinggianair'];
 
